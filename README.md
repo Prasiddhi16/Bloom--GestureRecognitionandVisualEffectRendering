@@ -29,8 +29,8 @@ pip install opencv-python mediapipe numpy
 Clone the repository:
 
 bash
-git clone https://github.com/Prasiddhi16/Bloom--GestureRecognitionandVisualEffectRendering.git
-cd gesture-magic
+git clone https://github.com/Prasiddhi16/Bloom--GestureRecognitionandVisualEffectRendering.git 
+cd gesture-magic.
 Place the MediaPipe hand landmark model file (hand_landmarker.task) in the project directory.
 
 Run the program:
@@ -48,7 +48,7 @@ Make a fist to pause animations.
 Press Q to quit.
 
 ## Project Structure
-gesture_magic.py → Main program file.
+demo.py → Main program file.
 
 hand_landmarker.task → Model file for hand detection.
 
@@ -60,7 +60,7 @@ GlitterSparkle → Sparkling particles from fingertips.
 
 WaveTrail → Trails created by waving.
 
-Helper functions:
+## Helper functions:
 
 is_open_palm() → Detects open palm gesture.
 

@@ -30,13 +30,17 @@ Clone the repository:
 
 bash
 git clone https://github.com/Prasiddhi16/Bloom--GestureRecognitionandVisualEffectRendering.git 
+
 cd gesture-magic.
+
 Place the MediaPipe hand landmark model file (hand_landmarker.task) in the project directory.
 
 Run the program:
 
 bash
+
 python demo.py
+
 Use your webcam to interact:
 
 Show an open palm to bloom flowers and sparkles.

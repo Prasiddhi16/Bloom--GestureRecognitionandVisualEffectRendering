@@ -4,6 +4,7 @@ import numpy as np
 import time
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+import random
 
 base_options = python.BaseOptions(
     model_asset_path="hand_landmarker.task"
@@ -19,6 +20,30 @@ options = vision.HandLandmarkerOptions(
 
 detector = vision.HandLandmarker.create_from_options(options)
 
+def  finger_position(hand,w,h):
+    return int(hand[8].x*w),int(hand[8].y*h)
+def create_puzzle(image,grid_size=4):
+    h,w,_=image.shape
+    tile_h,tile_w=h//grid_size,w//grid_size
+    tiles=[]
+    for i in range(grid_size):
+        for j in range(grid_size):
+            tile = image[i*tile_h:(i+1)*tile_h, j*tile_w:(j+1)*tile_w]
+            tiles.append(tile)
+    empty_tile = np.zeros_like(tiles[-1])
+    random.shuffle(tiles)
+    tiles[-1] = empty_tile
+    random.shuffle(tiles[:-1])
+    return tiles, tile_h, tile_w
+
+def draw_puzzle(tiles, tile_h,tile_w, grid_size=4):
+    puzzle_img = np.zeros((tile_h*grid_size, tile_w*grid_size, 3), dtype=np.uint8)
+    idx = 0
+    for i in range(grid_size):
+        for j in range(grid_size):
+            puzzle_img[i*tile_h:(i+1)*tile_h, j*tile_w:(j+1)*tile_w] = tiles[idx]
+            idx += 1
+    return puzzle_img
 
 def is_pinch(hand):
     thumb_tip = hand[4]
@@ -36,7 +61,9 @@ cap = cv2.VideoCapture(0)
 
 capture_count = 0
 last_capture_time = 0
-cooldown = 2  # seconds
+cooldown = 2
+puzzle_mode = False
+tiles, tile_h, tile_w = None, None, None
 
 while cap.isOpened():
 
@@ -64,7 +91,7 @@ while cap.isOpened():
 
     hand_count = len(results.hand_landmarks) if results.hand_landmarks else 0
 
-    # Debug: show number of hands detected
+   
     cv2.putText(
         frame,
         f"Hands detected: {hand_count}",
@@ -74,85 +101,94 @@ while cap.isOpened():
         (255, 255, 0),
         2
     )
+    if not puzzle_mode:
 
 
-    if results.hand_landmarks:
+        if results.hand_landmarks:
 
-      
-        if len(results.hand_landmarks) >= 2:
+        
+            if len(results.hand_landmarks) >= 2:
 
-            hand1 = results.hand_landmarks[0]
-            hand2 = results.hand_landmarks[1]
+                hand1 = results.hand_landmarks[0]
+                hand2 = results.hand_landmarks[1]
 
-            # Index finger tips
-            p1 = (int(hand1[8].x * w), int(hand1[8].y * h))
-            p2 = (int(hand2[8].x * w), int(hand2[8].y * h))
+                # Index finger tips
+                p1 = (int(hand1[8].x * w), int(hand1[8].y * h))
+                p2 = (int(hand2[8].x * w), int(hand2[8].y * h))
 
-            # Rectangle coords
-            x_min = min(p1[0], p2[0])
-            y_min = min(p1[1], p2[1])
-            x_max = max(p1[0], p2[0])
-            y_max = max(p1[1], p2[1])
+                # Rectangle coords
+                x_min = min(p1[0], p2[0])
+                y_min = min(p1[1], p2[1])
+                x_max = max(p1[0], p2[0])
+                y_max = max(p1[1], p2[1])
 
-            # Draw rectangle
-            cv2.rectangle(
-                frame,
-                (x_min, y_min),
-                (x_max, y_max),
-                (0, 255, 0),
-                3
-            )
+                # Draw rectangle
+                cv2.rectangle(
+                    frame,
+                    (x_min, y_min),
+                    (x_max, y_max),
+                    (0, 255, 0),
+                    3
+                )
 
-            # Draw points
-            cv2.circle(frame, p1, 10, (255, 0, 0), -1)
-            cv2.circle(frame, p2, 10, (0, 0, 255), -1)
+                # Draw points
+                cv2.circle(frame, p1, 10, (255, 0, 0), -1)
+                cv2.circle(frame, p2, 10, (0, 0, 255), -1)
 
-            cv2.putText(
-                frame,
-                "Bring hands apart + pinch BOTH to capture",
-                (20, 80),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.6,
-                (0, 255, 0),
-                2
-            )
+                cv2.putText(
+                    frame,
+                    "Bring hands apart + pinch BOTH to capture",
+                    (20, 80),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.6,
+                    (0, 255, 0),
+                    2
+                )
 
-           
-            current_time = time.time()
+            
+                current_time = time.time()
 
-            if (
-                is_pinch(hand1)
-                and is_pinch(hand2)
-                and current_time - last_capture_time > cooldown
-            ):
+                if (
+                    is_pinch(hand1)
+                    and is_pinch(hand2)
+                    and current_time - last_capture_time > cooldown
+                ):
 
-                cropped = frame[y_min:y_max, x_min:x_max]
+                    cropped = frame[y_min:y_max, x_min:x_max]
 
-                # Safety check
-                if cropped.size > 0:
+                    # Safety check
+                    if cropped.size > 0:
 
-                    filename = f"capture_{capture_count}.jpg"
-                    cv2.imwrite(filename, cropped)
+                        filename = f"capture_{capture_count}.jpg"
+                        cv2.imwrite(filename, cropped)
 
-                    print(f"Saved {filename}")
+                        print(f"Saved {filename}")
 
-                    capture_count += 1
-                    last_capture_time = current_time
+                        capture_count += 1
+                        last_capture_time = current_time
 
-                    cv2.putText(
-                        frame,
-                        "CAPTURED!",
-                        (50, 120),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        1,
-                        (0, 255, 255),
-                        3
-                    )
-
+                        cv2.putText(
+                            frame,
+                            "CAPTURED!",
+                            (50, 120),
+                            cv2.FONT_HERSHEY_SIMPLEX,
+                            1,
+                            (0, 255, 255),
+                            3
+                        )
+                        tiles, tile_h, tile_w = create_puzzle(cropped, grid_size=3)
+                        puzzle_mode = True
+    else:  
+        puzzle_img = draw_puzzle(tiles, tile_h, tile_w, grid_size=3)
+        cv2.putText(puzzle_img, "Pinch + swipe to move tiles", (20, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
+        puzzle_img = cv2.resize(puzzle_img, (w, h))
+       
+        frame = puzzle_img
     cv2.imshow("Gesture Rectangle Capture", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+     break
 
 cap.release()
 cv2.destroyAllWindows()

@@ -8,9 +8,9 @@ import random
 
 base_options = python.BaseOptions(model_asset_path="hand_landmarker.task")
 options = vision.HandLandmarkerOptions(base_options=base_options, num_hands=2,
-                                       min_hand_detection_confidence=0.3,
-                                       min_hand_presence_confidence=0.3,
-                                       min_tracking_confidence=0.3)
+min_hand_detection_confidence=0.3,
+min_hand_presence_confidence=0.3,
+ min_tracking_confidence=0.3)
 detector = vision.HandLandmarker.create_from_options(options)
 
 def finger_position(hand, w, h):
@@ -107,7 +107,17 @@ while cap.isOpened():
         if results.hand_landmarks:
             hand = results.hand_landmarks[0]
             if is_pinch(hand):
+                grid_size = 2
                 tip_x, tip_y = finger_position(hand, w, h)
+                tip_x, tip_y = finger_position(hand, w, h)
+                tile_row = tip_y // tile_h
+                tile_col = tip_x // tile_w
+                selected_idx = tile_row * grid_size + tile_col
+
+                # Highlight selected tile
+                x1, y1 = tile_col * tile_w, tile_row * tile_h
+                x2, y2 = x1 + tile_w, y1 + tile_h
+                cv2.rectangle(puzzle_img, (x1, y1), (x2, y2), (0, 0, 255), 3)
                 if swipe_start is None:
                     swipe_start = (tip_x, tip_y)
                 else:

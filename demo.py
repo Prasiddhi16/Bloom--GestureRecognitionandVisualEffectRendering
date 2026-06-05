@@ -141,7 +141,7 @@ class Flower:
 
         cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0, frame)
 
-# ─── GLITTER SPARKLE ──────────────────────────────────────────────────────────
+
 
 class GlitterSparkle:
     def __init__(self, x, y):

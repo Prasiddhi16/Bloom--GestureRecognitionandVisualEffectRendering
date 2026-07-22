@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart City Bus Route Optimizer</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/61/61231.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>
+                    <img src="https://cdn-icons-png.flaticon.com/512/61/61231.png" alt="Bus Icon" width="24" height="24">
+                    Smart City Bus Route Optimizer
+                </h1>
+                <p>Find the optimal bus route based on distance, transfers, or fare</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+
+        <!-- Route Finder Section -->
+        <section class="route-finder">
+            <h2>
+                <img src="https://cdn-icons-png.flaticon.com/512/61/61231.png" alt="Route Icon" width="20" height="20">
+                Route Finder
+            </h2>
+
+            <div class="finder-grid">
+                <div class="form-group">
+                    <label>
+                        <img src="https://cdn-icons-png.flaticon.com/512/149/149059.png" alt="Source Icon" width="16" height="16">
+                        Source Stop
+                    </label>
+                    <select id="sourceStop">
+                        <option>Stop A</option>
+                        <option>Stop B</option>
+                        <option>Stop C</option>
+                        <option>Stop D</option>
+                        <option>Stop E</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <img src="https://cdn-icons-png.flaticon.com/512/149/149059.png" alt="Destination Icon" width="16" height="16">
+                        Destination Stop
+                    </label>
+                    <select id="destStop">
+                        <option>Stop F</option>
+                        <option>Stop G</option>
+                        <option>Stop H</option>
+                        <option>Stop I</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="optimization-section">
+                <h3>
+                    <img src="https://cdn-icons-png.flaticon.com/512/252/252025.png" alt="Algorithm Icon" width="18" height="18">
+                    Optimization Algorithm
+                </h3>
+                <div class="algo-buttons">
+                    <label class="radio-button">
+                        <input type="radio" name="algorithm" checked>
+                        <span>Minimize Distance</span>
+                    </label>
+                    <label class="radio-button">
+                        <input type="radio" name="algorithm">
+                        <span>Optimize Time</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="route-options">
+                <button class="option-btn primary">
+                    <img src="https://cdn-icons-png.flaticon.com/512/61/61231.png" alt="Transfer Icon" width="16" height="16">
+                    <span>Minimum Transfers</span>
+                    <small>0 Transfers</small>
+                </button>
+                <button class="option-btn">
+                    <img src="https://cdn-icons-png.flaticon.com/512/433/433847.png" alt="Fare Icon" width="16" height="16">
+                    <span>Cheapest Fare</span>
+                    <small>Weighted Options</small>
+                </button>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" alt="Find Icon" width="16" height="16">
+                    Find Route
+                </button>
+                <button class="btn btn-secondary">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Clear Icon" width="16" height="16">
+                    Clear
+                </button>
+            </div>
+        </section>
+
+        <!-- Visualization -->
+        <section class="visualization-section">
+            <div class="section-header">
+                <h2>
+                    <img src="https://cdn-icons-png.flaticon.com/512/252/252025.png" alt="Network Icon" width="20" height="20">
+                    Bus Network Visualization
+                </h2>
+                <div class="legend">
+                    <span class="legend-item optimal">Optimal</span>
+                    <span class="legend-item route">Route</span>
+                    <span class="legend-item alternative">Alternative</span>
+                </div>
+            </div>
+
+            <canvas id="busNetworkCanvas" width="800" height="300"></canvas>
+            <p class="canvas-note">Showing optimized route with 2 steps</p>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <h2>
+                <img src="https://cdn-icons-png.flaticon.com/512/906/906334.png" alt="Results Icon" width="20" height="20">
+                Results
+            </h2>
+            <p class="results-subtitle">
+                Smart routing with personalized commute experience
+            </p>
+
+            <!-- Tabs -->
+            <div class="results-tabs">
+                <button class="tab-btn active" data-tab="routeTab">
+                    <img src="https://cdn-icons-png.flaticon.com/512/61/61231.png" alt="Route Icon" width="16" height="16">
+                    Route Details
+                </button>
+                <button class="tab-btn" data-tab="musicTab">
+                    <img src="https://cdn-icons-png.flaticon.com/512/727/727245.png" alt="Music Icon" width="16" height="16">
+                    Music Recommendation
+                </button>
+            </div>
+
+            <!-- Route Details Tab -->
+           <!-- Route Details Tab --> <div class="tab-content active" id="routeTab"> <div class="stats-grid"> <div class="stat-card distance"> <div> <div class="stat-label">Distance</div> <div class="stat-value">5 km</div> </div> </div> <div class="stat-card time"> <div> <div class="stat-label">Time</div> <div class="stat-value">14 min</div> </div> </div> <div class="stat-card cost"> <div> <div class="stat-label">Cost</div> <div class="stat-value">$18</div> </div> </div> <div class="stat-card transfers"> <div> <div class="stat-label">Transfers</div> <div class="stat-value">0</div> </div> </div> </div> <div class="route-segments"> <h3>Detailed Route Segments</h3> <div class="segment"> <div class="segment-header"> <span class="segment-title">Stop A to Stop D</span> <span class="segment-info">Segment 1 of 3</span> </div> <div class="segment-details"> <ul> <li><strong>Stops:</strong> A → B → C → D</li> <li><strong>Bus:</strong> Route 101</li> <li><strong>Distance:</strong> 2.5 km</li> <li><strong>Time:</strong> 8 minutes</li> </ul> </div> </div> </div> </div>
+
+           <!-- Music Recommendation Tab --> <div class="tab-content" id="musicTab"> <h3>Suggested Music for Your Commute</h3> <p class="results-subtitle"> Recommendations based on route duration and transfers </p> <div class="music-context"> <span class="context-chip">14 min ride</span> <span class="context-chip">0 transfers</span> <span class="context-chip">Direct route</span> </div> <div class="music-grid"> <div class="music-card active"> <h4>Lo-fi Chill</h4> <p>Relaxing beats for a smooth ride</p> </div> <div class="music-card"> <h4>Soft Pop</h4> <p>Light and pleasant commute vibes</p> </div> <div class="music-card"> <h4>Upbeat Hits</h4> <p>Energetic tracks for short trips</p> </div> </div> <div class="music-actions"> <button class="btn btn-outline">Open in Spotify</button> <button class="btn btn-outline">Open in YouTube Music</button> </div> </div>
+        </section>
+
+    </main>
+
+    <script src="index.js"></script>
+</body>
+</html>

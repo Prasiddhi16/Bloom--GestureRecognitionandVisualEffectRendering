@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Clothing Brand</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+    <body>
+        <div id="navbar-container"></div>
+        <header class="hero">
+          <video autoplay muted loop playsinline>
+  <source src="hero.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+        </header>
+        <main>
+            <br>
+            <div style="position: relative; overflow: hidden; height: 50px;">
+  <div class="movingtext">New arrivals just dropped!!-Shop now.Your one stop for effortless elegance.</div>
+</div>
+</div>
+<div class="productgrid">
+    <div class="productcard">
+        <img src="1img.jpg" alt="sweater">
+        <button class="orderbtn">Order Now</button>
+        <h3>White Basic Tee</h3>
+        <p>Rs 1200</p>
+    </div>
+    <div class="productcard">
+         <img src="2img.jpg" alt="sweater">
+         <button class="orderbtn">Order Now</button>
+        <h3>Bomber Leather Jacket</h3>
+        <p>Rs 3000</p>
+    </div>
+    <div class="productcard">
+         <img src="3img.jpg" alt="sweater">
+         <button class="orderbtn">Order Now</button>
+        <h3>Blue Jeans </h3>
+        <p>Rs 2500</p>
+    </div>
+    <div class="productcard">
+         <img src="4img.jpg" alt="sweater">
+         <button class="orderbtn">Order Now</button>
+        <h3>Polo Baby Tee</h3>
+        <p>Rs 1500</p>
+    </div>
+    <div class="productcard">
+         <img src="5img.jpg" alt="sweater">
+         <button class="orderbtn">Order Now</button>
+        <h3>Floral Maxi Skirt</h3>
+        <p>Rs 1300</p>
+    </div>
+    <div class="productcard">
+         <img src="6img.jpg" alt="sweater">
+         <button class="orderbtn">Order Now</button>
+        <h3>Polo Sweater</h3>
+        <p>Rs 1800</p>
+    </div>
+    <div class="productcard">
+         <img src="7img.jpg" alt="sweater">
+         <button class="orderbtn">Order Now</button>
+        <h3>Blue Flower Cardigain</h3>
+        <p>Rs 2100</p>
+    </div>
+    <div class="productcard">
+         <img src="8img.jpg" alt="sweater">
+         <button class="orderbtn">Order Now</button>
+        <h3>Jumpsuit Classy</h3>
+        <p>Rs 3000</p>
+    </div>
+</div>
+<div class="morewrap">
+    <a href="shop.html"><button class="more">More Items</button></a>
+</div>
+  </main>
+  <div id="footer-container"></div>
+  <script>
+  fetch('navbar.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('navbar-container').innerHTML = data;
+     const toggle = document.getElementById("searchToggle");
+      const searchBar = document.getElementById("searchBar");
+
+      if (toggle && searchBar) {
+        toggle.addEventListener("click", function (e) {
+          e.preventDefault();
+          searchBar.classList.toggle("show");
+        });
+      }
+    });
+    
+    fetch('footer.html')
+    .then(response => response.text())
+    .then(data => {document.getElementById('footer-container').innerHTML = data;
+    });
+
+</script>
+</body>
+</html>
